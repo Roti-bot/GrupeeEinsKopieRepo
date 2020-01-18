@@ -142,13 +142,21 @@ def ActivateAccount_view(request):
     # +5 fuer "token" & -2 fuer "\n + ' "
     token_from_string = request_string[(Positiontoken+5):(Positiontoken_Last-2)]
 
-    field_object = UserMoreFields._meta.get_field('token')
     obj = UserMoreFields.objects.filter(token=token_from_string)
     if not obj.exists():
        return HttpResponse('Activation link is invalid!')
 
-    obj_list = list(obj);
+    obj_list = list(obj)
+
     current_user_id = obj_list[0].user_id
+    now = datetime.now()
+    timestamp_now = datetime.timestamp(now)
+    timestamp_expire = obj_list[0].timestampExp
+
+    if (float(timestamp_expire) - float(timestamp_now)) >= 86400: #one day in secconds
+        print("too late mate")
+        return HttpResponse('Link Time expired, please contact Administration')
+
     obj.filter(user_id=current_user_id).update(is_link_auth=True)
 
     return HttpResponse('Account activated')
