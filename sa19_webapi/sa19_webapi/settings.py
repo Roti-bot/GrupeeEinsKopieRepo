@@ -25,7 +25,7 @@ SECRET_KEY = 'z&881w4)@u#z&fz97pd+9u$orgt+$nfy*)4!4ou!)=4(+5#b39'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts'
+    'accounts',
+    'djcelery_email'
 ]
 
 MIDDLEWARE = [
@@ -77,7 +78,7 @@ WSGI_APPLICATION = 'sa19_webapi.wsgi.application'
 DATABASES = {
     'default': {
         # MySQL database engine class.
-        'ENGINE': 'mysql.connector.django',
+        'ENGINE': 'django.db.backends.mysql',
         # MySQL database host ip.
         'HOST': 'localhost',
         # port number.
@@ -132,10 +133,17 @@ STATIC_URL = '/static/'
 
 
 # for emailing with gmail
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 # can be put in enviroment variable but yolo
 EMAIL_HOST_USER = 'sa19overwatch@gmail.com'
 EMAIL_HOST_PASSWORD = '!sa2019!'
+
+
+# for CELERY
+CELERY_BROKER_URL = 'redis://h:p614077444752228a070db783e654b0c8a51f4f1f09127ef2977646ea02f56f76@ec2-34-242-22-173.eu-west-1.compute.amazonaws.com:24229'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'

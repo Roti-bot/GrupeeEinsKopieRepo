@@ -26,6 +26,8 @@ from datetime import datetime
 
 User = get_user_model()
 
+# testing with broker TODO
+from .celeryTasks import send_email_auth
 
 def login_view(request):
 	next = request.GET.get('next')
@@ -50,7 +52,7 @@ def login_view(request):
 		login(request, user)
 		if next:
 			return redirect(next)
-		
+
 		responseData = {
 	        'id': 4,
 	        'name': 'Test Response',
@@ -99,9 +101,14 @@ def register_view(request):
 			                                             uid, token)
 		message = "Hello {0},\n {1}".format(user.username, activation_link)
 		to_email = form.cleaned_data.get('email')
-		email = EmailMessage(mail_subject, message, to=[to_email])
-		email.send()
-		
+
+         # Sending the mail with celery
+		send_email_auth.delay(mail_subject, message, to_email)
+		return HttpResponse('Please confirm your email address to complete the registration')
+
+		# email = EmailMessage(mail_subject, message, to=[to_email])
+		# email.send()
+
 		# current date and time + UserMoreFields save
 		now = datetime.now()
 		timestamp_now = datetime.timestamp(now)
@@ -160,4 +167,3 @@ def ActivateAccount_view(request):
     obj.filter(user_id=current_user_id).update(is_link_auth=True)
 
     return HttpResponse('Account activated')
-

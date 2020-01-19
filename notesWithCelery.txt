@@ -1,0 +1,6 @@
+installieren: 
+celery 
+redis
+appconf (pip install django-appconf)
+
+enter "celery -A sa19_webapi worker -l info" in sa19_webapi folder
