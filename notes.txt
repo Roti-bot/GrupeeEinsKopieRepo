@@ -1,0 +1,57 @@
+1. Django Server Task2 starten
+2. Django Server Task4 starten (manage.py runserver 8080)
+3. Celery starten (enter "celery -A sa19_webapi worker -l info" in sa19_webapi folder (in command line, after runserver)
+4. GUI starten (sudo python -m SimpleHTTPServer 80)
+5. in Browser auf "localhost" gehen (ohne /8080 usw)
+
+
+===========================================================
+Wichtige Files:
+
+========================
+Authentification:
+
+task4/sa19_webapi/accounts
+
+  !celeryTasks.py: da kommen die tasks rein die celery macht, unser auth link wird da versendet( mit send_email_auth()). Die Funktionen sleepz und send_email_test() sind nur zum test.
+  !forms.py: ist wie forms von task2
+  models.py: ??
+  tokens.py: erstellt unser RNG token
+  !!views.py: glaub die wichtigste file, pw reset usw funktioniert jz darauf
+
+-----
+task4/sa19_webapi/djcelery_email
+
+  nix wichtig, einfach a 3. party dings damit des pw reset mit celery geht. 
+
+-----
+task4/sa19_webapi/sa19_webapi
+  __init__.py: wichtig fuer Celery, steht eh in den comment
+  celery.py: steht in der celery dokumentation so drinnen, initialisiert celery glaub i
+  setting.py: ganz unten wichtig: Alles fur e-mails und Celery
+  REST wie in task2 eig. 
+
+
+-----
+task4/sa19_webapi/templates
+  einfach unsere "Websites" ohne GUI. Im ordner templates/users sind die die wir fuers PW resett nehmen. Die im templates Ordner direkt sind useless (new_password_done.html, password_reset_done.html, password_reset.html)
+
+========================
+GUI:
+  shops.js
+  detail_view.js
+  poi.js 
+  alles sonst bissl durchschauen
+  html / css bissl raffen
+
+
+
+
+
+
+
+
+
+
+
+
